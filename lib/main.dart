@@ -30,8 +30,6 @@ Future <String> _getWorldData() async{
   var getData = json.decode(response.body);
 
   if(this.mounted){
-
-
     setState(() {
       loading = false;
       lstCountry= [getData];
@@ -45,6 +43,7 @@ Future <String> _getWorldData() async{
       appBar: AppBar(
         actions: <Widget>[
           IconButton(icon: Icon(Icons.refresh), onPressed: (){
+             _getWorldData(); 
 
           })
         ],
@@ -56,15 +55,80 @@ Future <String> _getWorldData() async{
          loading ? Center(child: CircularProgressIndicator()) :
          ListView.builder(
            shrinkWrap: true,
-           itemCount: lstCountry==null ? 0 :lstCountry.length,
+           itemCount: lstCountry==null ? 0 :lstCountry[0]['countries_stat'].length,
            physics: NeverScrollableScrollPhysics(),
            itemBuilder:(context,index){
-             return listItem();
+             return listItem(index);
            }
          )
        ]
      ),
       
     );
+  
   }
+   Widget listItem(int index){
+     return Column(
+       children: <Widget>[
+         Center(
+          //  child: Text(lstCountry[0]['countries_stat'][index]['country_name']),
+         ),
+         Row(
+
+           children: <Widget>[
+               Expanded(
+
+                child: Container(
+                
+                 color: Colors.green,
+                 
+                 padding: EdgeInsets.all(30),
+                 child: Column(
+                 
+                 children: <Widget>[
+                   Text(lstCountry[0]['countries_stat'][index]['total_recovered'],style: TextStyle(color:Colors.white,fontSize:20),),
+                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 5)),
+                   Text('Dead',style: TextStyle(color:Colors.white,fontSize:20),)
+                 ],
+               ),),
+             ),
+
+
+             Expanded(
+                child: Container(
+                 color: Colors.blueAccent,
+                 padding: EdgeInsets.all(30),
+                 child: Column(
+                 
+                 children: <Widget>[
+                Text(lstCountry[0]['countries_stat'][index]['country_name'],style: TextStyle(color:Colors.white,fontSize:20),),
+
+                   Text(lstCountry[0]['countries_stat'][index]['active_cases'],style: TextStyle(color:Colors.white,fontSize:20),),
+                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 5)),
+                   Text('Infected',style: TextStyle(color:Colors.white,fontSize:20),)
+                 ],
+               ),),
+             ),
+           SizedBox(height: 20,),
+             Expanded(
+                child: Container(
+                 color: Colors.red,
+                 padding: EdgeInsets.all(30),
+                 child: Column(
+                 
+                 children: <Widget>[
+                   Text(lstCountry[0]['countries_stat'][index]['deaths'],style: TextStyle(color:Colors.white,fontSize:20),),
+                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 5)),
+                   Text('Dead',style: TextStyle(color:Colors.white,fontSize:20),)
+                 ],
+               ),),
+             ),
+             
+           ],
+           
+           )
+       ],
+     );
+   }
 }
+
